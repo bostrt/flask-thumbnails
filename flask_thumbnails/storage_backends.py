@@ -32,7 +32,7 @@ class FilesystemStorageBackend(BaseStorageBackend):
             try:
                 os.makedirs(os.path.dirname(filepath))
             except OSError as e:
-                if e.errno == errno.EEXIST:
+                if e.errno != errno.EEXIST:
                     raise
 
         with open(filepath, 'wb') as f:
