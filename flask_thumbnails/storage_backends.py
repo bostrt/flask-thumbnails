@@ -29,7 +29,11 @@ class FilesystemStorageBackend(BaseStorageBackend):
 
     def save(self, filepath, data):
         if not os.path.exists(os.path.dirname(filepath)):
-            os.makedirs(os.path.dirname(filepath), exist_ok=True)
+            try:
+                os.makedirs(os.path.dirname(filepath))
+            except OSError as e:
+                if e.errno == errno.EEXIST:
+                    raise
 
         with open(filepath, 'wb') as f:
             f.write(data)

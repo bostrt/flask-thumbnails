@@ -35,5 +35,13 @@ class FilesystemStorageBackendTestCase(unittest.TestCase):
             self.backend.save(tmp_file.name, b'123')
             self.assertTrue(os.path.exists(tmp_file.name))
 
+    def test_save_with_missing_dir(self):
+        dir = tempfile.mkdtemp()
+        with tempfile.NamedTemporaryFile(dir=dir) as tmp_file:
+            os.remove(tmp_file.name)
+            os.rmdir(dir)
+            self.backend.save(tmp_file.name, b'123')
+            self.assertTrue(os.path.exists(tmp_file.name))
+
     def tearDown(self):
         self.tmp_file.close()
